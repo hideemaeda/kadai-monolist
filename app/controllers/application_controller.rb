@@ -1,5 +1,4 @@
 class ApplicationController < ActionController::Base
-  before_action :require_user_logged_in, only: [:show]
   protect_from_forgery with: :exception
 
   include SessionsHelper
@@ -10,5 +9,19 @@ class ApplicationController < ActionController::Base
     unless logged_in?
       redirect_to login_url
     end
+  end
+
+  def read(result)
+    code = result['itemCode']
+    name = result['itemName']
+    url = result['itemUrl']
+    image_url = result['mediumImageUrls'].first['imageUrl'].gsub('?_ex=128x128', '')
+
+    {
+      code: code,
+      name: name,
+      url: url,
+      image_url: image_url,
+    }
   end
 end
